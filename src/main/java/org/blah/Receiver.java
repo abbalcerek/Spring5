@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * Created by ubuntu on 5/8/18.
  */
 
-@Component
+//@Component
 public class Receiver {
 
     @JmsListener(destination = "broadcast", containerFactory = "jmsFactory")

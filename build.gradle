@@ -75,6 +75,7 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-databind")
     // https://mvnrepository.com/artifact/org.springframework/spring-web
     compile "org.springframework:spring-jms"
+    compile 'org.springframework.amqp:spring-rabbit'
 
 
 
@@ -97,9 +98,11 @@ docker {
 }
 
 task createContainer(type: DockerCreateContainer) {
+    dependsOn bootJar
     dependsOn dockerBuildImage
     targetImageId { dockerBuildImage.getImageId() }
 }
+
 
 task startContainer(type: DockerStartContainer) {
     dependsOn createContainer
@@ -120,6 +123,13 @@ task runServer(type: DockerCreateContainer) {
 
 task removeServer(type: Exec) {
     commandLine 'docker stop activemq && docker rm activemq'
+}
+
+
+task runRabitmq(type: DockerCreateContainer) {
+    targetImageId { 'rabbitmq:3-management' }
+    portBindings = ["5672:5672", "15672:15672"]
+    containerName 'rabbitmq'
 }
 
 //run.doFirst()
