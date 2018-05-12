@@ -10,21 +10,21 @@ import org.springframework.stereotype.Component;
  * Created by ubuntu on 5/10/18.
  */
 @Component
-public class ListenerRabbit implements ChannelAwareMessageListener {
+public class ListenerRabbit {
 
 //    @Autowired
 //    Config config;
 
 //    final static String queue = "queue" + config.getId();
 
-//    @RabbitListener()
-//    public void receiveMessage(Message content) {
-//        System.out.println(content);
-//    }
-
-    @Override
-    public void onMessage(org.springframework.amqp.core.Message message, Channel channel) throws Exception {
-        System.out.println(message);
+    @RabbitListener(queues = "#{queue.name}")
+    public void receiveMessage(Message content) {
+        System.out.println(content);
     }
+
+//    @Override
+//    public void onMessage(org.springframework.amqp.core.Message message, Channel channel) throws Exception {
+//        System.out.println(message);
+//    }
 }
 

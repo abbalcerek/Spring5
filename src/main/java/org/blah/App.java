@@ -83,17 +83,17 @@ public class App {
     }
 
     @Bean
-    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, Config config, ListenerRabbit listenerRabbit) {
+    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, Config config) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(queue + config.getId());
-        container.setMessageListener(listenerRabbit);
+//        container.setQueueNames(queue + config.getId());
+//        container.setMessageListener(listenerRabbit);
         return container;
     }
 
     @Bean
     public Queue queue(Config config) {
-        return new Queue(queue + config.getId(), false);
+        return new AnonymousQueue();
     }
 
     @Bean
