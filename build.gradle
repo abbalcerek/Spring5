@@ -36,7 +36,7 @@ targetCompatibility = 1.8
 
 import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.*
-
+import java.io.ByteArrayOutputStream;
 
 group 'org.blah'
 version '1.0-SNAPSHOT'
@@ -77,6 +77,9 @@ dependencies {
     compile "org.springframework:spring-jms"
     compile 'org.springframework.amqp:spring-rabbit'
 
+    compile 'joda-time:joda-time:2.9.9'
+
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda' //, version: '2.9.5'
 
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -132,4 +135,32 @@ task runRabitmq(type: DockerCreateContainer) {
     containerName 'rabbitmq'
 }
 
-//run.doFirst()
+task runStack(type:Exec) {
+
+    dependsOn createContainer
+    workingDir './'
+   //on linux
+    commandLine 'docker', 'stack', 'deploy', '--compose-file', 'docker-compose.yml', 'jms-app'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+task rmStack(type:Exec) {
+    workingDir './'
+    //on linux
+    commandLine 'docker', 'stack', 'rm', 'jms-app'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+}

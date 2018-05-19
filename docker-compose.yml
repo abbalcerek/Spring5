@@ -7,19 +7,23 @@ services:
 #      - activemq
       - rabbitmq
     deploy:
-      replicas: 3
+      replicas: 2
 #      resources:
 #        limits:
 #          cpus: "0.1"
 #          memory: 50M
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: '1g'
 
     ports:
-#      - "1-65535:1-65535"
       - "8080:8080"
     networks:
       - webnet
+    network_mode: global
 
 #  activemq:
 #    image: rmohr/activemq:5.14.3
@@ -39,8 +43,14 @@ services:
       - "15672:15672"
     networks:
       - webnet
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '1g'
 networks:
   webnet:
+
 
 #docker run --name='activemq' -d \
 #  -e 'ACTIVEMQ_CONFIG_NAME=amqp-srv1' \
