@@ -83,6 +83,8 @@ dependencies {
 
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    
+    compile project(':Utils')
 }
 
 //apply plugin: 'com.github.johnrengelman.shadow';
@@ -100,33 +102,33 @@ docker {
     }
 }
 
-//task createContainer(type: DockerCreateContainer) {
-//    dependsOn bootJar
-//    dependsOn dockerBuildImage
-//    targetImageId { dockerBuildImage.getImageId() }
-//}
+task createContainer(type: DockerCreateContainer) {
+    dependsOn bootJar
+    dependsOn dockerBuildImage
+    targetImageId { dockerBuildImage.getImageId() }
+}
 
 
-//task startContainer(type: DockerStartContainer) {
-//    dependsOn createContainer
-//    targetContainerId { createContainer.getContainerId() }
-//}
-//
-//task runServer(type: DockerCreateContainer) {
-////    println(System.getProperty("user.name"))
-//
-//    targetImageId { 'rmohr/activemq:5.14.3' }
-//    portBindings = ['61616:61616', '8161:8161']
-//    image 'rmohr/activemq:5.14.3'
-//    containerName 'activemq'
-//    user 'ubuntu'
-////    executable 'docker'
-//    //args 'ps'//'run' , '-p', '61616:61616', '-p', '8161:8161', '--name', 'activemq', 'rmohr/activemq:5.14.3'
-//}
+task startContainer(type: DockerStartContainer) {
+    dependsOn createContainer
+    targetContainerId { createContainer.getContainerId() }
+}
 
-//task removeServer(type: Exec) {
-//    commandLine 'docker stop activemq && docker rm activemq'
-//}
+task runServer(type: DockerCreateContainer) {
+//    println(System.getProperty("user.name"))
+
+    targetImageId { 'rmohr/activemq:5.14.3' }
+    portBindings = ['61616:61616', '8161:8161']
+    image 'rmohr/activemq:5.14.3'
+    containerName 'activemq'
+    user 'ubuntu'
+//    executable 'docker'
+    //args 'ps'//'run' , '-p', '61616:61616', '-p', '8161:8161', '--name', 'activemq', 'rmohr/activemq:5.14.3'
+}
+
+task removeServer(type: Exec) {
+    commandLine 'docker stop activemq && docker rm activemq'
+}
 
 
 task runRabitmq(type: DockerCreateContainer) {
@@ -137,7 +139,7 @@ task runRabitmq(type: DockerCreateContainer) {
 
 task runStack(type:Exec) {
 
-    dependsOn ':Node:createContainer'
+    dependsOn createContainer
     workingDir './'
    //on linux
     commandLine 'docker', 'stack', 'deploy', '--compose-file', 'docker-compose.yml', 'jms-app'
