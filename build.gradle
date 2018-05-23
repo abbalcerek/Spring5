@@ -76,6 +76,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework/spring-web
     compile "org.springframework:spring-jms"
     compile 'org.springframework.amqp:spring-rabbit'
+    compileOnly 'org.projectlombok:lombok:1.16.20'
 
     compile 'joda-time:joda-time:2.9.9'
 

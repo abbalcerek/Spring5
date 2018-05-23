@@ -1,6 +1,7 @@
 package org.blah;
 
 import com.rabbitmq.client.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
@@ -14,12 +15,12 @@ import javax.xml.bind.SchemaOutputResolver;
 /**
  * Created by ubuntu on 5/10/18.
  */
+@Slf4j
 @Component
 public class ListenerRabbit {
 
     private final Config config;
 
-//    final static String queue = "queue" + config.getId();
 
     final private ApplicationEphemeralState state;
 
@@ -35,23 +36,13 @@ public class ListenerRabbit {
     @RabbitListener(queues = "#{queue.name}")
     public void receiveMessage(Message message) {
         state.updateLastServerMessageTime(message);
-        System.out.println("topic listner : " + message);
-//        System.out.println(state.messageCash);
+        log.debug("topic listner: {}", message);
     }
 
     @RabbitListener(queues = "#{rpcQueue.name}")
     public void receiveRpcMessage(Message message) {
-        System.out.println("rpc listener : " + message);
-
-        if (message.getPayload().equals("ping")) {
-            System.out.println("sending pong message : " + new Message(config.getId(), "pong") + " to : " + message.getSenderAddress());
-            sender.sendMessage(new Message(config.getId(), "pong"), "rpc", "rpc" + message.getSenderAddress());
-        }
+        log.debug("rpc listener: {}", message);
     }
 
-//    @Override
-//    public void onMessage(org.springframework.amqp.core.Message message, Channel channel) throws Exception {
-//        System.out.println(message);
-//    }
 }
 

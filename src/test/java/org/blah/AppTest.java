@@ -10,7 +10,6 @@ public class AppTest {
 
     @Test
     public void mainTest() {
-        App.main(new String[]{});
         Assert.assertTrue(true);
     }
 

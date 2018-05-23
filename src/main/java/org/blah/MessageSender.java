@@ -1,6 +1,7 @@
 package org.blah;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class MessageSender {
 
@@ -33,7 +35,11 @@ public class MessageSender {
     }
 
     public void sendMessage(Message message, String exchange, String key, Long delayInMillis, Boolean random) {
-        executorService.schedule(() -> { template.convertAndSend(exchange, key, message); }, 15, TimeUnit.MILLISECONDS);
+
+        executorService.schedule(() -> {
+            log.debug("Sending message {}, to (exchange, key): ({}, {})", message, exchange, key);
+            template.convertAndSend(exchange, key, message);
+        }, delayInMillis, TimeUnit.MILLISECONDS);
     }
 
     public void sendMessage(Message message, String exchange, String key) {
