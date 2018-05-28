@@ -1,5 +1,7 @@
 package org.blah;
 
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -22,8 +24,8 @@ import java.util.Map;
 @EnableKafka
 public class App {
 
-    String bootstrapAddress = "http://kafka:9092";
-    String consumerGroupId = "kafkaServiceConsumerGroup";
+    public final String bootstrapAddress = "http://kafka:9092";
+    public final String consumerGroupId = "kafkaServiceConsumerGroup";
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -64,6 +66,19 @@ public class App {
     }
 
     @Bean
+    public KafkaAdmin admin() {
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        return new KafkaAdmin(configs);
+    }
+
+
+    @Bean
+    public NewTopic testTopic() {
+        return new NewTopic("test-topic", 10, (short) 2);
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String>
     kafkaListenerContainerFactory() {
 
@@ -82,6 +97,8 @@ public class App {
         ApplicationContext context = SpringApplication.run(App.class, args);
 
         KafkaTemplate template = context.getBean(KafkaTemplate.class);
-        template.send("topic", "string message");
+        template.send("test-topic", "string message");
     }
+
+
 }

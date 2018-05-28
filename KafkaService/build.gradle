@@ -85,6 +85,8 @@ dependencies {
 
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    
+//    compile project(':Utils')
 }
 
 //apply plugin: 'com.github.johnrengelman.shadow';
@@ -100,10 +102,6 @@ docker {
         exec {
             entryPoint 'java', '-jar', '/KafkaService/lib/KafkaService-1.0-SNAPSHOT.jar'
         }
-
-//        exec {
-//            entryPoint '/bin/bash'
-//        }
     }
 }
 

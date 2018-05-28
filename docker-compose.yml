@@ -20,7 +20,7 @@ services:
           memory: '1g'
 
     ports:
-      - "8080:8080"
+      - "28080:8080"
     networks:
       - webnet
     network_mode: global
@@ -37,8 +37,8 @@ services:
 #    ports:
 #      - "61616:61616"
 #      - "8161:8161"
-#    networks:
-#      - webnet
+    networks:
+      - webnet
 
   rabbitmq:
     image: rabbitmq:3.6-management
@@ -55,13 +55,31 @@ services:
 
   kafka:
     image: spotify/kafka
+    environment:
+      - ADVERTISED_PORT=9092
+      - ADVERTISED_HOST=kafka
+#      - JMX_PORT=${JMX_PORT:-9999}
+    networks:
+      webnet:
+        aliases:
+          - kafka
+    ports:
+      - 9092:9092
+      - 2181:2181
+
+#
+  kafka-manager:
+    image: sheepkiller/kafka-manager:stable
+    environment:
+      - ZK_HOSTS=kafka:2181
+      - APPLICATION_SECRET=pass
     networks:
       - webnet
-    environment:
-      - ADVERTISED_HOST=kafka
-      - ADVERTISED_PORT=9092
+    depends_on:
+      - kafka
     ports:
-      - 9092
+      - 9000:9000
+    network_mode: global
 
 networks:
   webnet:

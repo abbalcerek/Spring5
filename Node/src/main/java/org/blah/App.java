@@ -81,7 +81,10 @@ public class App {
 //    }
 
     @Bean
-    public SimpleRabbitListenerContainerFactory myFactory(ConnectionFactory connectionFactory, SimpleRabbitListenerContainerFactoryConfigurer configurer) {
+    public SimpleRabbitListenerContainerFactory myFactory(
+            ConnectionFactory connectionFactory,
+            SimpleRabbitListenerContainerFactoryConfigurer configurer
+    ) {
         SimpleRabbitListenerContainerFactory factory =
                 new SimpleRabbitListenerContainerFactory();
         configurer.configure(factory, connectionFactory);
