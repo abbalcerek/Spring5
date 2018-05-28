@@ -6,3 +6,4 @@ build/
 workspace.xml
 *iml
 out/
+gradle/
