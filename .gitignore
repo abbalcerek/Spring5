@@ -5,3 +5,4 @@ build/
 *workspace.xml
 workspace.xml
 *iml
+out/

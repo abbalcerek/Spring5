@@ -25,7 +25,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'Spring5'
+    baseName = 'Node'
     version =  '1.0-SNAPSHOT'
 }
 
@@ -95,7 +95,7 @@ docker {
         baseImage = 'oracle/openjdk:8'
         tag = 'jmsapp'
         exec {
-            entryPoint 'java', '-jar', '/Spring5/lib/Spring5-1.0-SNAPSHOT.jar'
+            entryPoint 'java', '-jar', '/Node/lib/Node-1.0-SNAPSHOT.jar'
         }
     }
 }
@@ -135,21 +135,21 @@ task runRabitmq(type: DockerCreateContainer) {
     containerName 'rabbitmq'
 }
 
-task runStack(type:Exec) {
-
-    dependsOn createContainer
-    workingDir './'
-   //on linux
-    commandLine 'docker', 'stack', 'deploy', '--compose-file', 'docker-compose.yml', 'jms-app'
-
-    //store the output instead of printing to the console:
-    standardOutput = new ByteArrayOutputStream()
-
-    //extension method stopTomcat.output() can be used to obtain the output:
-    ext.output = {
-        return standardOutput.toString()
-    }
-}
+//task runStack(type:Exec) {
+//
+//    dependsOn createContainer
+//    workingDir './'
+//   //on linux
+//    commandLine 'docker', 'stack', 'deploy', '--compose-file', 'docker-compose.yml', 'jms-app'
+//
+//    //store the output instead of printing to the console:
+//    standardOutput = new ByteArrayOutputStream()
+//
+//    //extension method stopTomcat.output() can be used to obtain the output:
+//    ext.output = {
+//        return standardOutput.toString()
+//    }
+//}
 
 task rmStack(type:Exec) {
     workingDir './'

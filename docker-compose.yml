@@ -25,6 +25,10 @@ services:
       - webnet
     network_mode: global
 
+  kafkaService:
+    image: kafkaapp
+    depends_on:
+      - kafka
 #  activemq:
 #    image: rmohr/activemq:5.14.3
 #    deploy:
@@ -48,6 +52,17 @@ services:
         limits:
           cpus: '0.50'
           memory: '1g'
+
+  kafka:
+    image: spotify/kafka
+    networks:
+      - webnet
+    environment:
+      - ADVERTISED_HOST=kafka
+      - ADVERTISED_PORT=9092
+    ports:
+      - 9092
+
 networks:
   webnet:
 
