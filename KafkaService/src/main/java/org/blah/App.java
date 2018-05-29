@@ -65,17 +65,17 @@ public class App {
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
-    @Bean
-    public KafkaAdmin admin() {
-        Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        return new KafkaAdmin(configs);
-    }
+//    @Bean
+//    public KafkaAdmin admin() {
+//        Map<String, Object> configs = new HashMap<>();
+//        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+//        return new KafkaAdmin(configs);
+//    }
 
 
     @Bean
     public NewTopic testTopic() {
-        return new NewTopic("test-topic", 10, (short) 2);
+        return new NewTopic("test-topic", 10, (short)1);
     }
 
     @Bean
